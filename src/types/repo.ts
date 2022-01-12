@@ -1,4 +1,4 @@
-export interface IServerResponseRepo {
+export interface IServerResponseRepos {
   repos: Array<IRepo>;
 }
 export interface IRepo {
