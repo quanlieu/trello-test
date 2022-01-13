@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -17,6 +17,10 @@ const NEW = 'New';
 function Home() {
   const [repos, setRepos] = useState<IRepo[]>([]);
   const [selectedRepoId, setSelectedRepoId] = useState('');
+  const selectedRepo = useMemo(
+    () => repos.find((e) => e.id === selectedRepoId),
+    [repos, selectedRepoId]
+  );
 
   const handleClose = useCallback(() => setSelectedRepoId(''), []);
 
@@ -80,11 +84,14 @@ function Home() {
 
   return (
     <Container fluid>
-      <RepoNameModal
-        show={!!selectedRepoId}
-        onClose={handleClose}
-        onSubmit={handleModalSubmit}
-      />
+      {!!selectedRepoId && (
+        <RepoNameModal
+          show={!!selectedRepoId}
+          onClose={handleClose}
+          onSubmit={handleModalSubmit}
+          name={selectedRepo?.name}
+        />
+      )}
       <Row>
         <h1>All repository</h1>
       </Row>
