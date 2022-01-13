@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,19 +15,20 @@ function Repo() {
   const { id } = useParams();
   const [repo, setRepo] = useState<IRepo>();
 
-  useEffect(() => {
-    async function getApi() {
-      try {
-        if (id) {
-          const response = await getRepo(id);
-          setRepo(response.data);
-        }
-      } catch (error) {
-        console.error(error);
+  const loadRepo = useCallback(async () => {
+    try {
+      if (id) {
+        const response = await getRepo(id);
+        setRepo(response.data);
       }
+    } catch (error) {
+      console.error(error);
     }
-    getApi();
   }, [id]);
+
+  useEffect(() => {
+    loadRepo();
+  }, [loadRepo]);
   if (!repo) {
     return (
       <Container className="mt-4">
@@ -61,7 +62,7 @@ function Repo() {
   return (
     <Container fluid>
       <Row>
-        <h1>The name of repo</h1>
+        <h1>{repo.name}</h1>
       </Row>
       <Row>
         {
@@ -69,8 +70,10 @@ function Repo() {
           openList && (
             <Col sm={6} lg={3} className="mb-2">
               <List
+                listId={openList.id}
                 listName={openList.title}
                 vulnerabilityCards={openList.cards}
+                onReload={loadRepo}
               />
             </Col>
           )
@@ -80,8 +83,10 @@ function Repo() {
           confirmList && (
             <Col sm={6} lg={3} className="mb-2">
               <List
+                listId={confirmList.id}
                 listName={confirmList.title}
                 vulnerabilityCards={confirmList.cards}
+                onReload={loadRepo}
               />
             </Col>
           )
@@ -91,8 +96,10 @@ function Repo() {
           falsePositiveList && (
             <Col sm={6} lg={3} className="mb-2">
               <List
+                listId={falsePositiveList.id}
                 listName={falsePositiveList.title}
                 vulnerabilityCards={falsePositiveList.cards}
+                onReload={loadRepo}
               />
             </Col>
           )
@@ -102,8 +109,10 @@ function Repo() {
           fixedList && (
             <Col sm={6} lg={3} className="mb-2">
               <List
+                listId={fixedList.id}
                 listName={fixedList.title}
                 vulnerabilityCards={fixedList.cards}
+                onReload={loadRepo}
               />
             </Col>
           )
