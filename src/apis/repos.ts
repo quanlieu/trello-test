@@ -13,6 +13,10 @@ export const postRepo = (name: string) => {
   return http.post<IRepo>('repo', { name });
 };
 
+export const putRepoName = (id: string, name: string) => {
+  return http.put<IRepo>(`repo/${id}`, { id, name });
+};
+
 export const deleteRepo = (id: string) => {
   return http.delete<any>(`repo/${id}`);
 };

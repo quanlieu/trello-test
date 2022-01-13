@@ -6,21 +6,33 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-import NewRepo from '../modals/NewRepo';
-import { getAllRepos, postRepo, deleteRepo } from '../apis/repos';
+import RepoNameModal from '../modals/RepoNameModal';
+import { getAllRepos, postRepo, putRepoName, deleteRepo } from '../apis/repos';
 import { postList } from '../apis/list';
 import { IRepo } from '../types/repo';
 import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
 
+const NEW = 'New';
+
 function Home() {
   const [repos, setRepos] = useState<IRepo[]>([]);
-  const [showNewRepoModal, setShowNewRepoModal] = useState(false);
+  const [selectedRepoId, setSelectedRepoId] = useState('');
 
-  const handleClose = useCallback(() => setShowNewRepoModal(false), []);
+  const handleClose = useCallback(() => setSelectedRepoId(''), []);
 
-  const handleShow = useCallback(() => setShowNewRepoModal(true), []);
+  const handleNewRepoClick = useCallback(() => setSelectedRepoId(NEW), []);
 
-  const handleSubmit = async (repoName: string) => {
+  const handleRenameClick = (repoId: string) => setSelectedRepoId(repoId);
+
+  const handleModalSubmit = (repoName: string) => {
+    if (selectedRepoId === NEW) {
+      createNewRepo(repoName);
+    } else {
+      renameRepo(selectedRepoId, repoName);
+    }
+  };
+
+  const createNewRepo = async (repoName: string) => {
     try {
       const postRepoResponse = await postRepo(repoName);
       postList(postRepoResponse.data.id, OPEN);
@@ -34,16 +46,26 @@ function Home() {
     }
   };
 
-  const handleDelete = async (repoId: string) => {
+  const renameRepo = async (repoId: string, repoName: string) => {
     try {
-      const m = await deleteRepo(repoId);
-      console.log(m);
+      await putRepoName(repoId, repoName);
       const response = await getAllRepos();
       setRepos(response.data.repos);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handleDeleteClick = async (repoId: string) => {
+    try {
+      await deleteRepo(repoId);
+      const response = await getAllRepos();
+      setRepos(response.data.repos);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     async function getApi() {
       try {
@@ -58,10 +80,10 @@ function Home() {
 
   return (
     <Container fluid>
-      <NewRepo
-        show={showNewRepoModal}
+      <RepoNameModal
+        show={!!selectedRepoId}
         onClose={handleClose}
-        onSubmit={handleSubmit}
+        onSubmit={handleModalSubmit}
       />
       <Row>
         <h1>All repository</h1>
@@ -70,7 +92,7 @@ function Home() {
         <Col xs={6} sm={4} md={3} className="mb-4">
           <Card>
             <Card.Body className="text-center">
-              <Button variant="primary" onClick={handleShow}>
+              <Button variant="primary" onClick={handleNewRepoClick}>
                 New repo
               </Button>
             </Card.Body>
@@ -87,7 +109,17 @@ function Home() {
                   <Link to={`/repo/${v.id}`}>{v.name}</Link>
                 </Button>
                 <br />
-                <Button variant="danger" onClick={() => handleDelete(v.id)}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => handleRenameClick(v.id)}
+                >
+                  Rename
+                </Button>
+                <Button
+                  className="m-2"
+                  variant="danger"
+                  onClick={() => handleDeleteClick(v.id)}
+                >
                   Delete
                 </Button>
               </Card.Body>

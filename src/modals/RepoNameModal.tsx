@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +9,7 @@ export interface IProps {
   onClose: () => void;
 }
 
-function NewRepo(props: IProps) {
+function RepoNameModal(props: IProps) {
   const { show, onSubmit, onClose } = props;
   const [repoName, setRepoName] = useState('');
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -48,4 +48,4 @@ function NewRepo(props: IProps) {
   );
 }
 
-export default NewRepo;
+export default RepoNameModal;
