@@ -12,6 +12,9 @@ function List(props: IProps) {
   return (
     <div className="border p-2">
       <h4 className="text-center">{listName}</h4>
+      {!vulnerabilityCards.length && (
+        <h6 className="text-center">No vulnerability card</h6>
+      )}
       {vulnerabilityCards.map((card) => (
         <Card className="mt-2" key={card.id}>
           <Card.Body className="text-center">{card.text}</Card.Body>
