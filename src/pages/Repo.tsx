@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import List from '../components/List';
 import { getRepo } from '../apis/repos';
+import { postCard, deleteCard } from '../apis/card';
 import { IRepo } from '../types/repo';
 import { IList } from '../types/list';
 import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
@@ -26,6 +27,27 @@ function Repo() {
     }
   }, [id]);
 
+  const changeCardState = useCallback(async ({
+    text,
+    note,
+    newList,
+    id,
+  }: {
+    id: string;
+    text: string;
+    note: string;
+    newList: string;
+  }) => {
+    // Change card to another list is actually delete the card and create a new one
+    //   so Repo should handle it instead of List
+    const listId = repo?.lists.find((v) => v.title === newList)?.id;
+    if (listId && id) {
+      const promises = [deleteCard(id), postCard(listId, text, note)];
+      await Promise.all(promises);
+      loadRepo();
+    }
+  }, [loadRepo, repo]);
+
   useEffect(() => {
     loadRepo();
   }, [loadRepo]);
@@ -37,7 +59,6 @@ function Repo() {
     );
   }
 
-  // TODO: filter the repo into 4 list and pass the data to them
   let openList: IList;
   let confirmList: IList;
   let falsePositiveList: IList;
@@ -74,6 +95,7 @@ function Repo() {
                 listName={openList.title}
                 vulnerabilityCards={openList.cards}
                 onReload={loadRepo}
+                onChangeCardState={changeCardState}
               />
             </Col>
           )
@@ -87,6 +109,7 @@ function Repo() {
                 listName={confirmList.title}
                 vulnerabilityCards={confirmList.cards}
                 onReload={loadRepo}
+                onChangeCardState={changeCardState}
               />
             </Col>
           )
@@ -100,6 +123,7 @@ function Repo() {
                 listName={falsePositiveList.title}
                 vulnerabilityCards={falsePositiveList.cards}
                 onReload={loadRepo}
+                onChangeCardState={changeCardState}
               />
             </Col>
           )
@@ -113,6 +137,7 @@ function Repo() {
                 listName={fixedList.title}
                 vulnerabilityCards={fixedList.cards}
                 onReload={loadRepo}
+                onChangeCardState={changeCardState}
               />
             </Col>
           )

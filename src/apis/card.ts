@@ -8,3 +8,7 @@ export const postCard = (listId: string, text: string, note: string) => {
 export const putCard = (id: string, text: string, note: string) => {
   return http.put<any>(`/card/${id}`, { id, text, note });
 };
+
+export const deleteCard = (id: string) => {
+  return http.delete<any>(`/card/${id}`);
+};

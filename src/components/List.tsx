@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import CardInfoModal from '../modals/CardInfoModal';
 import { ICard } from '../types/card';
-import { postCard, putCard } from '../apis/card';
+import { postCard, putCard, deleteCard } from '../apis/card';
 
 const NEW = 'New';
 
@@ -13,10 +13,17 @@ export interface IProps {
   listName: string;
   vulnerabilityCards: ICard[];
   onReload: () => void;
+  onChangeCardState: (params: {
+    text: string;
+    note: string;
+    newList: string;
+    id: string;
+  }) => void;
 }
 
 function List(props: IProps) {
-  const { listId, listName, vulnerabilityCards, onReload } = props;
+  const { listId, listName, vulnerabilityCards, onReload, onChangeCardState } =
+    props;
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const selectedCard = useMemo(
@@ -30,11 +37,17 @@ function List(props: IProps) {
 
   const handleUpdateCardClick = (id: string) => setSelectedCardId(id);
 
-  const handleModalSubmit = (text: string, note: string) => {
+  const handleModalSubmit = (text: string, note: string, newList?: string) => {
     if (selectedCardId === NEW) {
       createNewCard(listId, text, note);
     } else {
-      updateCardInfo(selectedCardId, text, note);
+      if (newList) {
+        // Change card to another list is actually delete the card and create a new one
+        //   so it need the parent component to handle it
+        onChangeCardState({ text, note, newList, id: selectedCardId });
+      } else {
+        updateCardInfo(selectedCardId, text, note);
+      }
     }
   };
 
@@ -56,13 +69,24 @@ function List(props: IProps) {
     }
   };
 
+  const handleDeleteClick = async (cardId: string) => {
+    try {
+      await deleteCard(cardId);
+      onReload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="border p-2">
+    <div className="border p-2 bg-light">
       {!!selectedCardId && (
         <CardInfoModal
           show
           onClose={handleClose}
           onSubmit={handleModalSubmit}
+          list={listName}
+          cardId={selectedCardId}
           text={selectedCard?.text}
           note={selectedCard?.note}
         />
@@ -82,10 +106,18 @@ function List(props: IProps) {
             <Card.Title>{card.text}</Card.Title>
             <Card.Text>{card.note || 'No note'}</Card.Text>
             <Button
+              className="m-2"
               variant="outline-primary"
               onClick={() => handleUpdateCardClick(card.id)}
             >
-              Change content
+              Edit card
+            </Button>
+            <Button
+              className="m-2"
+              variant="danger"
+              onClick={() => handleDeleteClick(card.id)}
+            >
+              Delete card
             </Button>
           </Card.Body>
         </Card>
