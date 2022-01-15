@@ -23,7 +23,7 @@ function RepoNameModal(props: IProps) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Repo information</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -34,15 +34,20 @@ function RepoNameModal(props: IProps) {
               placeholder="Enter a name"
               onChange={handleChangeName}
               value={repoName}
+              data-testid="repo-name"
             />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="secondary" onClick={onClose} data-testid="close-btn">
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          data-testid="submit-btn"
+        >
           Save Changes
         </Button>
       </Modal.Footer>

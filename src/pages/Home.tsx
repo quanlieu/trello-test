@@ -99,7 +99,11 @@ function Home() {
         <Col xs={6} sm={4} md={3} className="mb-4">
           <Card>
             <Card.Body className="text-center">
-              <Button variant="primary" onClick={handleNewRepoClick}>
+              <Button
+                variant="primary"
+                onClick={handleNewRepoClick}
+                data-testid="new-repo-btn"
+              >
                 New repo
               </Button>
             </Card.Body>
@@ -119,6 +123,7 @@ function Home() {
                 <Button
                   variant="outline-secondary"
                   onClick={() => handleRenameClick(v.id)}
+                  data-testid="rename-btn"
                 >
                   Rename
                 </Button>
@@ -126,6 +131,7 @@ function Home() {
                   className="m-2"
                   variant="danger"
                   onClick={() => handleDeleteClick(v.id)}
+                  data-testid="delete-btn"
                 >
                   Delete
                 </Button>
