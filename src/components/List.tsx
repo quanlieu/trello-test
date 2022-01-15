@@ -93,7 +93,11 @@ function List(props: IProps) {
       )}
       <h4 className="text-center">{listName}</h4>
       <div className="m-2 text-center">
-        <Button variant="primary" onClick={handleNewCardClick}>
+        <Button
+          variant="primary"
+          onClick={handleNewCardClick}
+          data-testid="new-card-btn"
+        >
           New Vulnerability Card
         </Button>
       </div>
@@ -109,6 +113,7 @@ function List(props: IProps) {
               className="m-2"
               variant="outline-primary"
               onClick={() => handleUpdateCardClick(card.id)}
+              data-testid={`edit-card-btn-${card.id}`}
             >
               Edit card
             </Button>
@@ -116,6 +121,7 @@ function List(props: IProps) {
               className="m-2"
               variant="danger"
               onClick={() => handleDeleteClick(card.id)}
+              data-testid={`delete-card-btn-${card.id}`}
             >
               Delete card
             </Button>

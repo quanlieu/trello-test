@@ -52,7 +52,7 @@ function CardInfoModal(props: IProps) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>Vulnerability card information</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -62,6 +62,7 @@ function CardInfoModal(props: IProps) {
               type="text"
               placeholder="Enter card content"
               onChange={handleChangeText}
+              data-testid="card-text"
               value={text}
             />
           </Form.Group>
@@ -71,12 +72,17 @@ function CardInfoModal(props: IProps) {
               type="text"
               placeholder="Enter card note"
               onChange={handleChangeNote}
+              data-testid="card-note"
               value={note}
             />
           </Form.Group>
           {showChangeList && ![FALSE_POSITIVE, FIXED].includes(props.list) && (
             <Form.Group controlId="select">
-              <Form.Select value={list} onChange={handleSelectList}>
+              <Form.Select
+                value={list}
+                onChange={handleSelectList}
+                data-testid="select-state"
+              >
                 {cardsSelectOptions[props.list]?.map((v: string) => (
                   <option value={v} key={v}>
                     {v}
@@ -91,7 +97,11 @@ function CardInfoModal(props: IProps) {
         <Button variant="secondary" onClick={onClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          data-testid="submit-btn"
+        >
           Save Changes
         </Button>
       </Modal.Footer>
