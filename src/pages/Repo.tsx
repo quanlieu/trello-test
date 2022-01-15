@@ -39,7 +39,7 @@ function Repo() {
     newList: string;
   }) => {
     // Change card to another list is actually delete the card and create a new one
-    //   so Repo should handle it instead of List
+    //   so Repo should handle it instead of list
     const listId = repo?.lists.find((v) => v.title === newList)?.id;
     if (listId && id) {
       const promises = [deleteCard(id), postCard(listId, text, note)];
