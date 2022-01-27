@@ -1,21 +1,20 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-
-import RepoNameModal from '../modals/RepoNameModal';
-import { getAllRepos, postRepo, putRepoName, deleteRepo } from '../apis/repos';
-import { postList } from '../apis/list';
-import { IRepo } from '../types/repo';
-import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import RepoNameModal from '../../modals/RepoNameModal';
+import { actions } from './actions';
 
 const NEW = 'New';
 
 function Home() {
-  const [repos, setRepos] = useState<IRepo[]>([]);
+  const dispatch = useAppDispatch();
+  const { repos } = useAppSelector((state) => state.home);
   const [selectedRepoId, setSelectedRepoId] = useState('');
   const selectedRepo = useMemo(
     () => repos.find((e) => e.id === selectedRepoId),
@@ -36,51 +35,18 @@ function Home() {
     }
   };
 
-  const createNewRepo = async (repoName: string) => {
-    try {
-      const postRepoResponse = await postRepo(repoName);
-      postList(postRepoResponse.data.id, OPEN);
-      postList(postRepoResponse.data.id, CONFIRMED);
-      postList(postRepoResponse.data.id, FALSE_POSITIVE);
-      postList(postRepoResponse.data.id, FIXED);
-      const allReposResponse = await getAllRepos();
-      setRepos(allReposResponse.data.repos);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const createNewRepo = async (repoName: string) =>
+    dispatch(actions.createNewRepoStart({ name: repoName }));
 
-  const renameRepo = async (repoId: string, repoName: string) => {
-    try {
-      await putRepoName(repoId, repoName);
-      const response = await getAllRepos();
-      setRepos(response.data.repos);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const renameRepo = async (repoId: string, repoName: string) =>
+    dispatch(actions.renameRepoStart({ id: repoId, name: repoName }));
 
-  const handleDeleteClick = async (repoId: string) => {
-    try {
-      await deleteRepo(repoId);
-      const response = await getAllRepos();
-      setRepos(response.data.repos);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleDeleteClick = async (repoId: string) =>
+    dispatch(actions.deleteRepoStart({ id: repoId }));
 
   useEffect(() => {
-    async function getApi() {
-      try {
-        const response = await getAllRepos();
-        setRepos(response.data.repos);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getApi();
-  }, []);
+    dispatch(actions.getAllReposStart());
+  }, [dispatch]);
 
   return (
     <Container fluid>

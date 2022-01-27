@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import Home from './pages/Home/Home';
 import Repo from './pages/Repo';
 
 import 'bootstrap/dist/css/bootstrap.min.css';

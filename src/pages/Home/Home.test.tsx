@@ -8,9 +8,9 @@ import {
 } from '@testing-library/react';
 import { AxiosResponse } from 'axios';
 
-import * as reposApi from '../apis/repos';
-import * as listApi from '../apis/list';
-import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
+import * as reposApi from '../../apis/repos';
+import * as listApi from '../../apis/list';
+import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../../constants/lists';
 import Home from './Home';
 
 jest.mock('react-router-dom', () => ({
