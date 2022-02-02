@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import RepoNameModal from '../../modals/RepoNameModal';
+import RepoNameModal from '../../components/modals/RepoNameModal';
 import { actions } from './actions';
 
 const NEW = 'New';

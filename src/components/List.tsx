@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-import CardInfoModal from '../modals/CardInfoModal';
+import CardInfoModal from './modals/CardInfoModal';
 import { ICard } from '../types/card';
 import { postCard, putCard, deleteCard } from '../apis/card';
 

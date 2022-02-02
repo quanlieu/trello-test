@@ -5,12 +5,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 
-import List from '../components/List';
-import { getRepo } from '../apis/repos';
-import { postCard, deleteCard } from '../apis/card';
-import { IRepo } from '../types/repo';
-import { IList } from '../types/list';
-import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
+import List from '../../components/List';
+import { getRepo } from '../../apis/repos';
+import { postCard, deleteCard } from '../../apis/card';
+import { IRepo } from '../../types/repo';
+import { IList } from '../../types/list';
+import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../../constants/lists';
 
 function Repo() {
   const { id } = useParams();

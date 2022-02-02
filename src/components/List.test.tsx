@@ -6,11 +6,9 @@ import {
   cleanup,
   waitFor,
 } from '@testing-library/react';
-import { AxiosResponse } from 'axios';
 
-import { ICard } from '../types/card';
 import * as cardApi from '../apis/card';
-import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../constants/lists';
+import { OPEN, CONFIRMED } from '../constants/lists';
 import List, { IProps } from './List';
 
 describe('List', () => {
