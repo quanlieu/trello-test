@@ -2,9 +2,10 @@ import { useState, useMemo, useCallback } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-import CardInfoModal from './modals/CardInfoModal';
-import { ICard } from '../types/card';
-import { postCard, putCard, deleteCard } from '../apis/card';
+import CardInfoModal from '../../../components/modals/CardInfoModal';
+import { ICard } from '../../../types/card';
+import { useAppDispatch } from '../../../app/hooks';
+import { actions } from '../actions';
 
 const NEW = 'New';
 
@@ -12,18 +13,11 @@ export interface IProps {
   listId: string;
   listName: string;
   vulnerabilityCards: ICard[];
-  onReload: () => void;
-  onChangeCardState: (params: {
-    text: string;
-    note: string;
-    newList: string;
-    id: string;
-  }) => void;
 }
 
 function List(props: IProps) {
-  const { listId, listName, vulnerabilityCards, onReload, onChangeCardState } =
-    props;
+  const dispatch = useAppDispatch();
+  const { listId, listName, vulnerabilityCards } = props;
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const selectedCard = useMemo(
@@ -37,44 +31,32 @@ function List(props: IProps) {
 
   const handleUpdateCardClick = (id: string) => setSelectedCardId(id);
 
+  const handleDeleteClick = async (id: string) => {
+    dispatch(actions.deleteCardStart({ id }));
+  };
+
   const handleModalSubmit = (text: string, note: string, newList?: string) => {
     if (selectedCardId === NEW) {
-      createNewCard(listId, text, note);
+      dispatch(actions.createNewCardStart({ listId, text, note }));
     } else {
       if (newList) {
-        // Change card to another list is actually delete the card and create a new one
-        //   so it need the parent component to handle it
-        onChangeCardState({ text, note, newList, id: selectedCardId });
+        dispatch(
+          actions.updateCardStateStart({
+            text,
+            note,
+            newList,
+            id: selectedCardId,
+          })
+        );
       } else {
-        updateCardInfo(selectedCardId, text, note);
+        dispatch(
+          actions.updateCardInfoStart({
+            id: selectedCardId,
+            text,
+            note,
+          })
+        );
       }
-    }
-  };
-
-  const createNewCard = async (listId: string, text: string, note: string) => {
-    try {
-      await postCard(listId, text, note);
-      onReload();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const updateCardInfo = async (cardId: string, text: string, note: string) => {
-    try {
-      await putCard(cardId, text, note);
-      onReload();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDeleteClick = async (cardId: string) => {
-    try {
-      await deleteCard(cardId);
-      onReload();
-    } catch (error) {
-      console.error(error);
     }
   };
 
