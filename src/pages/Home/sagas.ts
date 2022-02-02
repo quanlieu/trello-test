@@ -26,13 +26,18 @@ export function* createNewRepo(
     );
     yield all(
       [OPEN, CONFIRMED, FALSE_POSITIVE, FIXED].map((title) =>
-        call(listApis.postList, { repoId: data.id, title })
+        put(actions.createNewListStart({ repoId: data.id, title }))
       )
     );
     yield put(actions.getAllReposStart());
   } catch (error: any) {
     yield put(actions.createNewRepoFailed(error));
   }
+}
+
+export function* createNewList(action: { type: string; payload: any }) {
+  const { repoId, title }: { repoId: string; title: string } = action.payload;
+  yield call(listApis.postList, { repoId, title });
 }
 
 export function* deleteRepo(
@@ -62,6 +67,7 @@ const HomeSaga = [
   takeEvery(types.CREATE_NEW_REPO_START, createNewRepo),
   takeEvery(types.DELETE_REPO_START, deleteRepo),
   takeEvery(types.RENAME_REPO_START, renameRepo),
+  takeEvery(types.CREATE_NEW_LIST_START, createNewList),
 ];
 
 export default HomeSaga;

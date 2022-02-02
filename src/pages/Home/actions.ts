@@ -11,6 +11,9 @@ export const types = {
   RENAME_REPO_START: 'RENAME_REPO_START',
   RENAME_REPO_SUCCESS: 'RENAME_REPO_SUCCESS',
   RENAME_REPO_FAILED: 'RENAME_REPO_FAILED',
+  CREATE_NEW_LIST_START: 'CREATE_NEW_LIST_START',
+  CREATE_NEW_LIST_SUCCESS: 'CREATE_NEW_LIST_SUCCESS',
+  CREATE_NEW_LIST_FAILED: 'CREATE_NEW_LIST_FAILED',
 };
 
 export const actions = {
@@ -58,6 +61,17 @@ export const actions = {
   }),
   renameRepoFailed: (payload: object) => ({
     type: types.RENAME_REPO_FAILED,
+    payload,
+  }),
+  createNewListStart: (payload: { repoId: string, title: string }) => ({
+    type: types.CREATE_NEW_LIST_START,
+    payload,
+  }),
+  createNewListSuccess: () => ({
+    type: types.CREATE_NEW_LIST_SUCCESS,
+  }),
+  createNewListFailed: (payload: object) => ({
+    type: types.CREATE_NEW_LIST_FAILED,
     payload,
   }),
 };
