@@ -11,7 +11,7 @@ import List from './partials/List';
 import { IList } from '../../types/list';
 import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../../constants/lists';
 
-const emptyList: IList = { id: '', title: '', cards: [] }
+const emptyList: IList = { id: '', title: '', cards: [] };
 
 function Repo() {
   const { id = '' } = useParams();
@@ -64,11 +64,7 @@ function Repo() {
       <Row>
         {orderedList.map((list) => (
           <Col sm={6} lg={3} className="mb-2" key={list.id}>
-            <List
-              listId={list?.id}
-              listName={list?.title}
-              cards={list?.cards}
-            />
+            <List list={list} />
           </Col>
         ))}
       </Row>

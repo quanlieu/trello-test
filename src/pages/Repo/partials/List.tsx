@@ -3,26 +3,24 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 import CardInfoModal from '../../../components/modals/CardInfoModal';
-import { ICard } from '../../../types/card';
+import { IList } from '../../../types/list';
 import { useAppDispatch } from '../../../app/hooks';
 import { actions } from '../actions';
 
 const NEW = 'New';
 
 export interface IProps {
-  listId: string;
-  listName: string;
-  cards: ICard[];
+  list: IList
 }
 
 function List(props: IProps) {
   const dispatch = useAppDispatch();
-  const { listId, listName, cards } = props;
+  const { list } = props;
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const selectedCard = useMemo(
-    () => cards.find((e) => e.id === selectedCardId),
-    [cards, selectedCardId]
+    () => list.cards.find((e) => e.id === selectedCardId),
+    [list.cards, selectedCardId]
   );
 
   const handleClose = useCallback(() => setSelectedCardId(''), []);
@@ -37,7 +35,7 @@ function List(props: IProps) {
 
   const handleModalSubmit = (text: string, note: string, newList?: string) => {
     if (selectedCardId === NEW) {
-      dispatch(actions.createNewCardStart({ listId, text, note }));
+      dispatch(actions.createNewCardStart({ listId: list.id, text, note }));
     } else {
       if (newList) {
         dispatch(
@@ -67,13 +65,13 @@ function List(props: IProps) {
           show
           onClose={handleClose}
           onSubmit={handleModalSubmit}
-          list={listName}
+          list={list.title}
           cardId={selectedCardId}
           text={selectedCard?.text}
           note={selectedCard?.note}
         />
       )}
-      <h4 className="text-center">{listName}</h4>
+      <h4 className="text-center">{list.title}</h4>
       <div className="m-2 text-center">
         <Button
           variant="primary"
@@ -83,10 +81,10 @@ function List(props: IProps) {
           New Card
         </Button>
       </div>
-      {!cards.length && (
+      {!list.cards.length && (
         <h6 className="text-center">No Card</h6>
       )}
-      {cards.map((card) => (
+      {list.cards.map((card) => (
         <Card className="mt-2" key={card.id}>
           <Card.Body className="text-center">
             <Card.Title>{card.text}</Card.Title>

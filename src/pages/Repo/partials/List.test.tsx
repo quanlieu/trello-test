@@ -16,12 +16,14 @@ describe('List', () => {
 
   beforeEach(() => {
     props = {
-      listId: 'list-id',
-      listName: OPEN,
-      cards: [
-        { text: 'Vulnerability 1', id: 'm-card' },
-        { text: 'Vulnerability 2', id: 'n-card' },
-      ],
+      list: {
+        id: 'list-id',
+        title: OPEN,
+        cards: [
+          { text: 'Vulnerability 1', id: 'm-card' },
+          { text: 'Vulnerability 2', id: 'n-card' },
+        ],
+      },
     };
   });
 
@@ -38,7 +40,7 @@ describe('List', () => {
   });
 
   it('should submit new card', async () => {
-    props.cards = [];
+    props.list.cards = [];
     render(<List {...props} />);
     jest
       .spyOn(cardApi, 'postCard')
@@ -46,9 +48,7 @@ describe('List', () => {
       .mockImplementation(() => new Promise((resolve) => resolve({})));
 
     fireEvent.click(screen.getByTestId('new-card-btn'));
-    expect(
-      screen.getByText('Card information')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Card information')).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId('card-text'), {
       target: { value: 'lorem' },
@@ -66,9 +66,7 @@ describe('List', () => {
       );
     });
     await waitFor(() => {
-      expect(
-        screen.queryByText('Card information')
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Card information')).not.toBeInTheDocument();
     });
   });
 
@@ -81,9 +79,7 @@ describe('List', () => {
 
     expect(screen.getByText('Vulnerability 1')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('edit-card-btn-m-card'));
-    expect(
-      screen.getByText('Card information')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Card information')).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId('card-text'), {
       target: { value: 'Vulnerability A' },
@@ -101,9 +97,7 @@ describe('List', () => {
       );
     });
     await waitFor(() => {
-      expect(
-        screen.queryByText('Card information')
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Card information')).not.toBeInTheDocument();
     });
   });
 
@@ -121,9 +115,7 @@ describe('List', () => {
       expect(cardApi.deleteCard).toHaveBeenCalledWith('m-card');
     });
     await waitFor(() => {
-      expect(
-        screen.queryByText('Card information')
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Card information')).not.toBeInTheDocument();
     });
   });
 
