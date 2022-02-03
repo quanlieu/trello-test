@@ -18,7 +18,7 @@ describe('List', () => {
     props = {
       listId: 'list-id',
       listName: OPEN,
-      vulnerabilityCards: [
+      cards: [
         { text: 'Vulnerability 1', id: 'm-card' },
         { text: 'Vulnerability 2', id: 'n-card' },
       ],
@@ -30,7 +30,7 @@ describe('List', () => {
     jest.restoreAllMocks();
   });
 
-  it('should render list and vulnerability cards', async () => {
+  it('should render list and Cards', async () => {
     render(<List {...props} />);
     expect(screen.getByText(OPEN)).toBeInTheDocument();
     expect(screen.getByText('Vulnerability 1')).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('List', () => {
   });
 
   it('should submit new card', async () => {
-    props.vulnerabilityCards = [];
+    props.cards = [];
     render(<List {...props} />);
     jest
       .spyOn(cardApi, 'postCard')
@@ -47,7 +47,7 @@ describe('List', () => {
 
     fireEvent.click(screen.getByTestId('new-card-btn'));
     expect(
-      screen.getByText('Vulnerability card information')
+      screen.getByText('Card information')
     ).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId('card-text'), {
@@ -67,7 +67,7 @@ describe('List', () => {
     });
     await waitFor(() => {
       expect(
-        screen.queryByText('Vulnerability card information')
+        screen.queryByText('Card information')
       ).not.toBeInTheDocument();
     });
   });
@@ -82,7 +82,7 @@ describe('List', () => {
     expect(screen.getByText('Vulnerability 1')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('edit-card-btn-m-card'));
     expect(
-      screen.getByText('Vulnerability card information')
+      screen.getByText('Card information')
     ).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId('card-text'), {
@@ -102,7 +102,7 @@ describe('List', () => {
     });
     await waitFor(() => {
       expect(
-        screen.queryByText('Vulnerability card information')
+        screen.queryByText('Card information')
       ).not.toBeInTheDocument();
     });
   });
@@ -122,12 +122,12 @@ describe('List', () => {
     });
     await waitFor(() => {
       expect(
-        screen.queryByText('Vulnerability card information')
+        screen.queryByText('Card information')
       ).not.toBeInTheDocument();
     });
   });
 
-  it('Change vulnerability card state should call onChangeCardState', async () => {
+  it('Change Card state should call onChangeCardState', async () => {
     render(<List {...props} />);
     jest
       .spyOn(cardApi, 'postCard')

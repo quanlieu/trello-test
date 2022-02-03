@@ -67,7 +67,7 @@ function Repo() {
             <List
               listId={list?.id}
               listName={list?.title}
-              vulnerabilityCards={list?.cards}
+              cards={list?.cards}
             />
           </Col>
         ))}

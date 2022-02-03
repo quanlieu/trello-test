@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-I updated simple-backend to enable Vulnerability Cards to contain notes and fix a bug that you can't delete Vulnerability Card. So please use the simple-backend.zip.
+I updated simple-backend to enable Cards to contain notes and fix a bug that you can't delete Card. So please use the simple-backend.zip.
 
 In the project directory, you can run:
 

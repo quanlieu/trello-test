@@ -19,7 +19,7 @@ const NEW = 'New';
 
 // Open to either Confirmed, False Positive, and Fixed.
 // Confirmed to Fixed.
-// Vulnerability Cards in False Positive and Fixed lists can't be moved to any other state.
+// Cards in False Positive and Fixed lists can't be moved to any other state.
 const cardsSelectOptions: { [unit: string]: string[] } = {
   [OPEN]: [OPEN, CONFIRMED, FALSE_POSITIVE, FIXED],
   [CONFIRMED]: [CONFIRMED, FIXED],
@@ -52,12 +52,12 @@ function CardInfoModal(props: IProps) {
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Vulnerability card information</Modal.Title>
+        <Modal.Title>Card information</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="text">
-            <Form.Label>Vulnerability Card content</Form.Label>
+            <Form.Label>Card content</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter card content"
@@ -67,7 +67,7 @@ function CardInfoModal(props: IProps) {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="text">
-            <Form.Label>Vulnerability Card note</Form.Label>
+            <Form.Label>Card note</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter card note"

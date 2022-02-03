@@ -12,17 +12,17 @@ const NEW = 'New';
 export interface IProps {
   listId: string;
   listName: string;
-  vulnerabilityCards: ICard[];
+  cards: ICard[];
 }
 
 function List(props: IProps) {
   const dispatch = useAppDispatch();
-  const { listId, listName, vulnerabilityCards } = props;
+  const { listId, listName, cards } = props;
 
   const [selectedCardId, setSelectedCardId] = useState('');
   const selectedCard = useMemo(
-    () => vulnerabilityCards.find((e) => e.id === selectedCardId),
-    [vulnerabilityCards, selectedCardId]
+    () => cards.find((e) => e.id === selectedCardId),
+    [cards, selectedCardId]
   );
 
   const handleClose = useCallback(() => setSelectedCardId(''), []);
@@ -80,13 +80,13 @@ function List(props: IProps) {
           onClick={handleNewCardClick}
           data-testid="new-card-btn"
         >
-          New Vulnerability Card
+          New Card
         </Button>
       </div>
-      {!vulnerabilityCards.length && (
-        <h6 className="text-center">No vulnerability card</h6>
+      {!cards.length && (
+        <h6 className="text-center">No Card</h6>
       )}
-      {vulnerabilityCards.map((card) => (
+      {cards.map((card) => (
         <Card className="mt-2" key={card.id}>
           <Card.Body className="text-center">
             <Card.Title>{card.text}</Card.Title>
