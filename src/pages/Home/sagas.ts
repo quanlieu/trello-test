@@ -36,8 +36,12 @@ export function* createNewRepo(
 }
 
 export function* createNewList(action: { type: string; payload: any }) {
-  const { repoId, title }: { repoId: string; title: string } = action.payload;
-  yield call(listApis.postList, { repoId, title });
+  try {
+    const { repoId, title }: { repoId: string; title: string } = action.payload;
+    yield call(listApis.postList, { repoId, title });
+  } catch (error: any) {
+    yield put(actions.createNewListFailed(error));
+  }
 }
 
 export function* deleteRepo(

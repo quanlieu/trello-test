@@ -10,13 +10,14 @@ import { actions } from './actions';
 import List from './partials/List';
 import { IList } from '../../types/list';
 import { OPEN, CONFIRMED, FALSE_POSITIVE, FIXED } from '../../constants/lists';
+import { selectRepo } from './selectors';
 
 const emptyList: IList = { id: '', title: '', cards: [] };
 
 function Repo() {
   const { id = '' } = useParams();
   const dispatch = useAppDispatch();
-  const { repo } = useAppSelector((state) => state.repo);
+  const repo = useAppSelector(selectRepo);
 
   const loadRepo = useCallback(async () => {
     dispatch(actions.getRepoStart({ id }));

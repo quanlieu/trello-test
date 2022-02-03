@@ -21,12 +21,12 @@ export function* createNewCard(
   action: ReturnType<typeof actions.createNewCardStart>
 ) {
   try {
-    const repo: IRepo = yield select(selectRepo);
     yield call(cardApis.postCard, action.payload);
     yield put(actions.createNewCardSuccess());
+    const repo: IRepo = yield select(selectRepo);
     yield put(actions.getRepoStart({ id: repo.id }));
   } catch (error: any) {
-    yield put(actions.deleteCardFailed(error));
+    yield put(actions.createNewCardFailed(error));
   }
 }
 
@@ -34,9 +34,9 @@ export function* updateCardInfo(
   action: ReturnType<typeof actions.updateCardInfoStart>
 ) {
   try {
-    const repo: IRepo = yield select(selectRepo);
     yield call(cardApis.putCard, action.payload);
     yield put(actions.updateCardInfoSuccess());
+    const repo: IRepo = yield select(selectRepo);
     yield put(actions.getRepoStart({ id: repo.id }));
   } catch (error: any) {
     yield put(actions.updateCardInfoFailed(error));
@@ -47,9 +47,9 @@ export function* deleteCard(
   action: ReturnType<typeof actions.deleteCardStart>
 ) {
   try {
-    const repo: IRepo = yield select(selectRepo);
     yield call(cardApis.deleteCard, action.payload);
     yield put(actions.deleteCardSuccess());
+    const repo: IRepo = yield select(selectRepo);
     yield put(actions.getRepoStart({ id: repo.id }));
   } catch (error: any) {
     yield put(actions.deleteCardFailed(error));
@@ -63,14 +63,14 @@ export function* updateCardState(
 ) {
   try {
     const repo: IRepo = yield select(selectRepo);
-    const { newList, ...payload } = action.payload;
+    const { newList, id, ...payload } = action.payload;
     const newListId = repo?.lists.find((v) => v.title === newList)?.id || '';
     yield call(cardApis.postCard, { ...payload, listId: newListId });
-    yield call(cardApis.deleteCard, payload);
-    yield put(actions.deleteCardSuccess());
+    yield call(cardApis.deleteCard, { id });
+    yield put(actions.updateCardInfoSuccess());
     yield put(actions.getRepoStart({ id: repo.id }));
   } catch (error: any) {
-    yield put(actions.deleteCardFailed(error));
+    yield put(actions.updateCardStateFailed(error));
   }
 }
 

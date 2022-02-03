@@ -9,12 +9,13 @@ import Button from 'react-bootstrap/Button';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import RepoNameModal from '../../components/modals/RepoNameModal';
 import { actions } from './actions';
+import { selectHomeStore } from './selectors';
 
 const NEW = 'New';
 
 function Home() {
   const dispatch = useAppDispatch();
-  const { repos } = useAppSelector((state) => state.home);
+  const { repos } = useAppSelector(selectHomeStore);
   const [selectedRepoId, setSelectedRepoId] = useState('');
   const selectedRepo = useMemo(
     () => repos.find((e) => e.id === selectedRepoId),
@@ -35,13 +36,13 @@ function Home() {
     }
   };
 
-  const createNewRepo = async (repoName: string) =>
+  const createNewRepo = (repoName: string) =>
     dispatch(actions.createNewRepoStart({ name: repoName }));
 
-  const renameRepo = async (repoId: string, repoName: string) =>
+  const renameRepo = (repoId: string, repoName: string) =>
     dispatch(actions.renameRepoStart({ id: repoId, name: repoName }));
 
-  const handleDeleteClick = async (repoId: string) =>
+  const handleDeleteClick = (repoId: string) =>
     dispatch(actions.deleteRepoStart({ id: repoId }));
 
   useEffect(() => {
