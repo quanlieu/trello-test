@@ -59,5 +59,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/apis",
+      "/*actions.ts/",
+      "/*reducers.ts/",
+      "/*selectors.ts/",
+      "actions.ts",
+      "reducers.ts",
+      "selectors.ts"
+    ]
   }
 }
